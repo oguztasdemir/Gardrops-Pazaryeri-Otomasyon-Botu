@@ -1,73 +1,70 @@
 # 🛍️ Gardrops Otonom Pazaryeri & Takip Suite (2022 Arşivi)
 
-> 📅 **Tarihçe & Geliştirme Notu:** Bu repo, **2022 yılında** e-ticaret pazaryerinde (Gardrops) mağaza görünürlüğünü artırmak, geri takip (follow-for-follow) süreçlerini otonomlaştırmak ve platformun o dönemki teknik kısıtlarını aşmak amacıyla geliştirilmiş 3 farklı otomasyon modülünün orijinal klasör hiyerarşisiyle korunmuş arşiv sürümüdür.
-
----
-
-## 📁 Proje Klasör Hiyerarşisi & Modüller
-
-Bu depoda 2022 yılında geliştirilen **3 bağımsız yaklaşım** yer almaktadır:
-
-```text
-Gardrops-Otomasyon-Botu/
-├── Gardrops Fonksiyonel Bot (BS4)/       # BeautifulSoup4 & Requests tabanlı hızlı DOM kazıyıcı
-│   ├── search.py                        # Hedef kitleyi hızla tarayıp listelere ayrıştıran motor
-│   ├── follow.py                        # Filtrelenen profillere otonom istek gönderici
-│   ├── Lists/                           # Taranan ve takip edilen kullanıcı önbellekleri
-│   └── kullanici.py                     # Hesap ve hedef mağaza parametreleri
-│
-├── Gardrops Fonksiyonel Bot (Selenium)/  # Tam otonom tarayıcı simülasyonu
-│   ├── follow.py                        # Canlı Chrome oturumuyla gerçek kullanıcı aksiyonları
-│   └── Lists/                           # Oturum listeleri
-│
-└── Gardrops Geri Takip Botu/             # Karşılıklı takip (GT) kontrolü ve takibi bırakanlar
-    ├── search.py                        # Takipçi ve takip edilen diferansiyel analizi
-    ├── main.py                          # Otomasyon başlatıcı
-    └── Lists/                           # Analiz sonuç listeleri
-```
+> 📅 **Tarihçe & Geliştirme Notu:** Bu proje, **2022 yılında** e-ticaret pazaryerinde (Gardrops) mağaza etkileşimini ve satış dönüşümlerini artırmak, geri takip (follow-for-follow) süreçlerini otonomlaştırmak ve platformun o dönemki teknik arayüz kısıtlarını aşmak amacıyla geliştirilmiş en kapsamlı (V3 - BeautifulSoup4 + Selenium Hibrit) otomasyon çalışmasıdır.
 
 ---
 
 ## 🎯 2022 Vaka Analizi & Çözülen Problemler
 
-2022 döneminde Gardrops platformunda butik satıcıların karşılaştığı darboğazlar:
-1. **Görünürlük & Satış Limiti:** Mağazadaki ürünlerin öne çıkması için her gün yüzlerce potansiyel alıcının profiline manuel girip takip etme zorunluluğu.
-2. **Platform Arayüz Eksikliği (DOM Bug):** Takipçiler sayfasında aşağı kaydırma yapıldığında platformun DOM güncelleme hatasından dolayı daha önce takip edilen kullanıcıların sanki takip edilmemiş gibi görünmesi.
+2022 döneminde Gardrops platformunda butik satıcıların karşılaştığı temel darboğazlar:
+1. **Görünürlük Sınırı:** Mağazadaki ürünlerin hedef kitleye ulaşması için her gün yüzlerce potansiyel alıcının profiline manuel girip takip etme zorunluluğu.
+2. **Platform Arayüz Eksikliği (DOM Bug):** Takipçiler sayfasında aşağı kaydırma yapıldığında platformun DOM güncelleme hatasından dolayı daha önce takip edilen kullanıcıların durumunun listede hatalı yansıması.
 3. **Sayfalama Limiti (Pagination):** Gardrops arayüzünün tek oturumda en fazla 3030 kullanıcıyı listelemesi; kalan kullanıcıların arayüzde kaybolması.
 
-### 💡 Mühendislik Çözümü: Diferansiyel Önbellekleme
-Yukarıdaki hataları aşmak için `Lists/` dizininde **diferansiyel metin önbelleği** kurgulanmıştır:
-- Taranan her kullanıcı anlık kaydedilir (`Gardrops_tur.txt`).
-- Genel havuzla (`Gardrops_total.txt`) karşılaştırılarak daha önce taranmış olanlar elenir.
-- Sadece yeni ve benzersiz profillere etkileşim uygulanarak mükerrer işlem yapılması engellenir.
+---
+
+## 🏗️ Sistem Mimarisi & Gelişmiş Özellikler (V3 Hibrit Model)
+
+Bu sürüm, önceki saf Selenium botlarının yavaşlığını aşmak üzere **hibrit** olarak kurgulanmıştır:
+
+1. **Hızlı DOM Kazıyıcı (`search.py` - BeautifulSoup4 & Requests):**
+   - Hedef mağazaların potansiyel müşteri listesini saniyeler içinde tarar ve listelere ayrıştırır.
+2. **Otonom Tarayıcı Motoru (`follow.py` - Selenium WebDriver):**
+   - Ayrıştırılan kullanıcı profillerine otonom girerek "Takip Et" butonunu tetikler.
+3. **Mükerrerlik Önleyici Diferansiyel Önbellek (`Lists/`):**
+   - `Gardrops_tur.txt` ve `Gardrops_total.txt` karşılaştırması yaparak daha önce taranan veya takip edilen profillere mükerrer işlem yapılmasını %100 engeller.
+4. **Çok Kanallı Bildirim Sistemi (E-Posta & Mobil Push):**
+   - İşlemler tamamlandığında Gmail (SMTP) ve mobil bildirim servisi üzerinden geliştiriciye anlık durum raporu gönderir.
+
+---
+
+## 📁 Proje Dosya Yapısı
+
+```text
+Gardrops-Otomasyon-Botu/
+├── search.py          # Hızlı BeautifulSoup4 kullanıcı kazıma motoru
+├── follow.py          # Selenium otonom profil takip motoru
+├── search_main.py     # Kazıma başlatıcı
+├── follow_main.py     # Takip başlatıcı
+├── kullanici.py       # Hesap, hedef mağaza ve filtreleme ayarları
+├── bildirim.txt       # Mobil push bildirim servis konfigürasyonu
+├── Lists/             # Taranan, takip edilen ve GT durum önbellekleri
+├── requirements.txt   # Python kütüphane bağımlılıkları
+└── README.md          # 2022 vaka analizi ve dokümantasyon
+```
 
 ---
 
 ## 🚀 Kurulum & Çalıştırma
 
-### Bağımlılıkları Yükleyin:
+### 1. Bağımlılıkları Yükleyin:
 ```bash
 pip install -r requirements.txt
 ```
 
-### Modülleri Çalıştırma:
-İlgili modülün klasörüne girerek ayarları yapıp çalıştırabilirsiniz:
+### 2. Yapılandırma:
+`kullanici.py` dosyasını açarak giriş bilgilerinizi ve hedef mağaza kullanıcı adını girin.
 
+### 3. Başlatma:
 ```bash
-# 1. Hızlı BS4 Kazıyıcı Modülü:
-cd "Gardrops Fonksiyonel Bot (BS4)"
-python search.py
+# Adım 1: Hedef kullanıcıları hızlıca listeye çıkarın:
+python search_main.py
 
-# 2. Selenium Otonom Takip Modülü:
-cd "../Gardrops Fonksiyonel Bot (Selenium)"
-python follow.py
-
-# 3. Geri Takip Kontrol Modülü:
-cd "../Gardrops Geri Takip Botu"
-python main.py
+# Adım 2: Otonom takip sürecini başlatın:
+python follow_main.py
 ```
 
 ---
 
 ## ⚠️ Arşiv & Sorumluluk Reddi
-*Bu proje yazılım mimarisi, veri analitiği ve web otomasyonu tarihçesi amacıyla eğitim amaçlı açık kaynak olarak paylaşılmıştır. 2022 yılındaki DOM mimarisine göre kodlanmıştır.*
+*Bu yazılım eğitim, veri madenciliği ve web otomasyonu tarihçesi amacıyla açık kaynak olarak paylaşılmıştır. 2022 yılındaki DOM yapısına göre tasarlanmıştır.*
