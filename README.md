@@ -1,5 +1,8 @@
 # 🛍️ Gardrops Otonom Pazaryeri & Akıllı Takip Suite (2022 Arşivi)
 
+[![CI Tests](https://github.com/oguztasdemir/Gardrops-Pazaryeri-Otomasyon-Botu/actions/workflows/ci.yml/badge.svg)](https://github.com/oguztasdemir/Gardrops-Pazaryeri-Otomasyon-Botu/actions/workflows/ci.yml)
+
+
 > 📅 **Tarihçe & Geliştirme Notu:** Bu proje, **2022 yılında** e-ticaret pazaryerinde (Gardrops) organik mağaza etkileşimini artırmak, geri takip (follow-for-follow) süreçlerini otonomlaştırmak ve platformun o dönemki teknik altyapı bug'larını aşmak amacıyla geliştirilmiş hibrit (BeautifulSoup4 + Selenium) otomasyon çalışmasıdır.
 
 ---
@@ -104,3 +107,23 @@ python follow_main.py
 
 ## ⚠️ Arşiv & Sorumluluk Reddi
 *Bu yazılım 2022 yılındaki Gardrops web DOM mimarisi ve arayüz kısıtları incelenerek eğitim ve otomasyon algoritmaları araştırma amacıyla paylaşılmıştır.*
+
+
+---
+
+## Ekran Görüntüleri
+
+### Gardrops Otomasyon Konsolu Ve Diferansiyel Filtre
+![Gardrops Otomasyon Konsolu Ve Diferansiyel Filtre](docs/screenshots/01_gardrops_otomasyon_konsolu_ve_diferansiyel_filtre.png)
+
+
+---
+
+## Yerel Testler
+
+Projenin temel çalışma ve sözdizimi doğrulama testlerini çalıştırmak için:
+
+```bash
+pip install pytest
+pytest tests -v
+```
